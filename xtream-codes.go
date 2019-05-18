@@ -27,6 +27,8 @@ type XtreamClient struct {
 
 	// We store an internal map of Streams for use with GetStreamURL
 	streams map[int]Stream
+
+	ResponseHeader http.Header
 }
 
 // NewClient returns an initialized XtreamClient with the given values.
@@ -298,6 +300,8 @@ func (c *XtreamClient) sendRequest(action string, parameters url.Values) ([]byte
 	if httpErr != nil {
 		return nil, fmt.Errorf("cannot reach server. %v", httpErr)
 	}
+
+	c.ResponseHeader = response.Header
 
 	if response.StatusCode > 399 {
 		return nil, fmt.Errorf("status code was %d, expected 2XX-3XX", response.StatusCode)
